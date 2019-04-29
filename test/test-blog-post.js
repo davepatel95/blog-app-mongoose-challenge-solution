@@ -62,6 +62,47 @@ describe('Blogpost API resource', function() {
     });
 
     describe('GET endpoint', function() {
+        it('should return all existing blogposts', function() {
+            let res;
+            return chai.request(app)
+                .get('/blogposts')
+                .then(function(_res) {
+                    res = _res;
+                    expect(res).to.have.status(200);
+                    expect(res.body.blogposts).to.have.lengthOf.at.least(1);
+                    return BlogPost.count();
+                })
+                .then(function(count) {
+                    expect(res.body.blogposts).to.have.lengthOf(count);
+                });
+        });
 
+        it('should return blogposts with correct fields', function() {
+            let resBlogpost;
+            return chai.request(app)
+                .get('/blogposts')
+                .then(function(res) {
+                    expect(res).to.have.status(200);
+                    expect(res).to.be.json;
+                    expect(res.body.blogposts).to.be.a('array');
+                    expect(res.body.blogposts).to.have.lengthOf.at.least(1);
+
+                    res.body.blogposts.forEach(function (blogpost) {
+                        expect(blogpost).to.be.a('object');
+                        expect(blogpost).to.include.keys('id', 'author', 'title', 'content', 'created');
+                    });
+                    resBlogpost = res.body.blogposts[0];
+                    return BlogPost.findById(resBlogpost.id);
+                })
+                .then(function(blogpost) {
+
+                    expect(resBlogpost.id).to.equal(blogpost.id);
+                    expect(resBlogpost.author).to.be.equal(blogpost.authorName);
+                    expect(resBlogpost.title).to.equal(blogpost.title);
+                    expect(resBlogpost.content).to.equal(blogpost.content);
+                });
+        });
     });
+
+    
 });
