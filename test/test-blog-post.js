@@ -8,9 +8,17 @@ const mongoose = require('mongoose');
 const expect = chai.expect;
 //const should = chai.should();
 
-const {BlogPost} = require('../models');
-const {app, runServer, closeServer} = require('../server');
-const {TEST_DATABASE_URL} = require('../config');
+const {
+    BlogPost
+} = require('../models');
+const {
+    app,
+    runServer,
+    closeServer
+} = require('../server');
+const {
+    TEST_DATABASE_URL
+} = require('../config');
 
 chai.use(chaiHttp);
 
@@ -19,7 +27,7 @@ function seedBlogpostData() {
     console.info('seeding blogpost data');
     const seedData = [];
 
-    for(let i=1; i<=10; i++) {
+    for (let i = 1; i <= 10; i++) {
         seedData.push(generateBlogpostData());
     }
 
@@ -44,58 +52,58 @@ function tearDownDb() {
     return mongoose.connection.dropDatabase();
 }
 
-describe('Blogpost API resource', function() {
-    
+describe('Blogpost API resource', function () {
+
     before(function () {
         return runServer(TEST_DATABASE_URL);
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
         return seedBlogpostData();
     });
 
-    afterEach(function() {
+    afterEach(function () {
         return tearDownDb();
     });
 
-    after(function() {
+    after(function () {
         return closeServer();
     });
 
-    describe('GET endpoint', function() {
-        it('should return all existing posts', function() {
+    describe('GET endpoint', function () {
+        it('should return all existing posts', function () {
             let res;
             return chai.request(app)
                 .get('/posts')
-                .then(function(_res) {
+                .then(function (_res) {
                     res = _res;
                     expect(res).to.have.status(200);
                     expect(res.body).to.have.lengthOf.at.least(1);
                     return BlogPost.count();
                 })
-                .then(function(count) {
+                .then(function (count) {
                     expect(res.body).to.have.lengthOf(count);
                 });
         });
 
-        it('should return posts with the right fields', function() {
+        it('should return posts with the right fields', function () {
             let resPost;
             return chai.request(app)
                 .get('/posts')
-                .then(function(res) {
+                .then(function (res) {
                     expect(res).to.have.status(200);
                     expect(res).to.be.json;
                     expect(res.body).to.be.a('array');
                     expect(res.body).to.have.lengthOf.at.least(1);
 
-                    res.body.forEach(function(post) {
+                    res.body.forEach(function (post) {
                         expect(post).to.be.a('object');
                         expect(post).to.include.keys('id', 'author', 'title', 'content');
                     });
                     resPost = res.body[0];
                     return BlogPost.findById(resPost.id);
                 })
-                .then(function(post) {
+                .then(function (post) {
                     expect(resPost.id).to.equal(post.id);
                     expect(resPost.title).to.equal(post.title);
                     expect(resPost.author).to.equal(post.authorName);
@@ -104,8 +112,8 @@ describe('Blogpost API resource', function() {
         });
     });
 
-    describe('POST endpoint', function() {
-        it('should add new blogpost', function() {
+    describe('POST endpoint', function () {
+        it('should add new blogpost', function () {
             const newPost = {
                 title: faker.lorem.sentence(),
                 author: {
@@ -118,7 +126,7 @@ describe('Blogpost API resource', function() {
             return chai.request(app)
                 .post('/posts')
                 .send(newPost)
-                .then(function(res) {
+                .then(function (res) {
                     expect(res).to.have.status(201);
                     expect(res).to.be.json;
                     expect(res.body).to.be.a('object');
@@ -128,7 +136,7 @@ describe('Blogpost API resource', function() {
                     expect(res.body.content).to.equal(newPost.content);
                     return BlogPost.findById(res.body.id);
                 })
-                .then(function(post) {
+                .then(function (post) {
                     expect(post.title).to.equal(newPost.title);
                     expect(post.content).to.equal(newPost.content);
                     expect(post.author.firstName).to.equal(newPost.author.firstName);
@@ -137,8 +145,8 @@ describe('Blogpost API resource', function() {
         });
     });
 
-    describe('PUT endpoint', function() {
-        it('should update fields sent over', function() {
+    describe('PUT endpoint', function () {
+        it('should update fields sent over', function () {
             const updateData = {
                 title: 'The Blazers will never beat the Nuggets if McCollum does not step up',
                 author: {
@@ -170,8 +178,8 @@ describe('Blogpost API resource', function() {
         });
     });
 
-    describe('DELETE endpoint', function() {
-        it('should delete a blogpost by id', function() {
+    describe('DELETE endpoint', function () {
+        it('should delete a blogpost by id', function () {
 
             let post;
             return BlogPost
@@ -180,14 +188,13 @@ describe('Blogpost API resource', function() {
                     post = _post;
                     return chai.request(app).delete(`/posts/${post.id}`);
                 })
-                .then(function(res) {
+                .then(function (res) {
                     expect(res).to.have.status(204);
                     return BlogPost.findById(post.id);
                 })
-                .then(function(_post) {
+                .then(function (_post) {
                     expect(_post).to.be.null;
                 });
         });
     });
 });
-
