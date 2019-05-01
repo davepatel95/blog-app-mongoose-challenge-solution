@@ -6,6 +6,6 @@ deploy:
   provider: heroku
   api_key:
     secure: Mh1kWSB2k65mVF2EkdHIxPN9AS+sfAVSS3XkuLQoJj8IAl/pncfUAh7L+ijE1GefFU+Yy9r5OQcLPq6tU6h5TnMGeYePbgTNFxo7TTpU1G99WQk+T+O4t7p5th2bfh7omclzde4XyK8lt02iUheKMWzZRFcuoMnbAA4MVH7kFGkm+kg0WkVWz2PWGzOs8qra+y4YRYhyud5J70dD0y3gHq58qlFGA6X8Ziwg0n+HxnQPWNGtTQ31G2iOF+2w4Tbyt3qsxGZDolb9mCkfFBsqZqD+tmp1oBXEWB9MNB146i/IdWPilBKNdHh9BaHNPfwkO/x2tagOADk3PXbrTNmmsDgMqJYYZn33rlFYvYd/Q+i7Is2XCM/ZdqkcyRosI5o1sFIEMZqDa4J6QibJu5SlOTfRl3AupxlHUlZ3ijObockavlvMtFRjMpywI4fdPbSPxFq42Mwjd5bPmGSeIz+reKZIWPyPK/2+YhfDfI+ITdjAxxzZrMbfPgepbWhdCf0cZ0PzrTt0083xGAZUhTVZ6i8KCax4hRhDIdOX4e9bErolE0lQ4+xeF1F9lTP229KzEvMTI5gQn9mO93gGA1NtuRR5KOp+NK/jCVsOFC/b5Ol9wm4M9TRET4w2KWS6Iyvj256kcaqBCo+QIbyz/WPRFwjY7ycoQ6e3FJmj+WC3Cos=
-  app: https://dry-beyond-32984.herokuapp.com/
+  app: dry-beyond-32984
   on:
     repo: davepatel95/blog-app-mongoose-challenge-solution
